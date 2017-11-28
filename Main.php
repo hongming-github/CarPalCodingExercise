@@ -26,6 +26,7 @@ function entry()
 //    }
     try {
         $result = $service->process_input($frames);
+        echo "\n";
         for ($row = 0; $row < 10; $row++) {
             echo 'result:' . $result[$row] . " ";
         }
@@ -35,10 +36,5 @@ function entry()
 
 
 }
-
-
-
-
-
 
 entry();

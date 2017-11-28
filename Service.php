@@ -31,76 +31,46 @@ class Service
      */
     function process_input($input)
     {
+        // Validate input.
         $this->validator->validate_input($input);
 
         $result = array();
 
         $total_score = 0;
 
-        for ($frame = 0; $frame < 10; $frame++) {
+        for ($frame = 0; $frame < count($input); $frame++) {
+            // Sum score of each frame.
+            $total_score += $this->calculate_frame_score($input, $frame);
 
-            foreach ($input[$frame] as $current_score) {
-                if ($current_score > 10 || $current_score < 0) {
-                    throw new Exception('');
-                } else {
-                    $total_score += $current_score;
-
-                    if ($current_score == 10) {
-                        foreach ($input[$frame + 1] as $next_score) {
-                            if ($next_score > 10 || $next_score < 0) {
-                                throw new Exception('');
-                            } else {
-                                $total_score += $next_score;
-
-                                if ($next_score == 10) {
-                                    foreach ($input[$frame + 2] as $next_next_score) {
-                                        if ($next_next_score > 10 || $next_next_score < 0) {
-                                            throw new Exception('');
-                                        } else {
-                                            $total_score += $next_next_score;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             array_push($result, $total_score);
         }
         return $result;
     }
 
+    /**
+     * Calculate score for each frame.
+     * @param $input
+     * @param $frame
+     * @param int $index
+     * @return int $frame_score
+     * @throws Exception
+     */
     function calculate_frame_score($input, $frame, $index = 0)
     {
         $frame_score = 0;
 
         foreach ($input[$frame] as $current_score) {
-            if ($current_score > 10 || $current_score < 0) {
-                throw new Exception('');
-            } else {
-                $frame_score += $current_score;
+            // Validate score.
+            $this->validator->validate_score($current_score);
 
-                if ($current_score == 10 && $index < 3) {
-                    $index++;
-                    return $this->calculate_frame_score($input, $frame + $index, $index);
-                }
+            $frame_score += $current_score;
+            // If it is a strike and haven't got another two additional score from next frames(based on example 1)
+            // and is not last frame, then the bowler can get additional score from next frames.
+            if ($current_score == 10 && $index < 2 && $frame < count($input) - 1) {
+                $frame_score += $this->calculate_frame_score($input, $frame + 1, ++$index);
             }
-        }
-    }
 
-    function addAdditionalScore($current_score, $arr, $frame)
-    {
-        $additional_score = 0;
-        $t = 0;
-        if ($current_score != 10) return $additional_score;
-        if ($current_score == 10) {
-            $t++;
-            foreach ($arr[$frame + $t] as $score) {
-                $additional_score += $score;
-                $additional_score += addAdditionalScore($score, $arr, $frame + 2);
-            }
-            return $additional_score;
         }
+        return $frame_score;
     }
 }

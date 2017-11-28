@@ -28,5 +28,15 @@ class Validator
             }
         }
     }
+
+    function validate_score($score)
+    {
+        if (!is_integer($score)) {
+            throw new Exception('Score:' . $score . ' is not an integer!');
+        }
+        if ($score > 10 || $score < 0) {
+            throw new Exception('Score' . $score . ' should be only between 0 and 1!');
+        }
+    }
 }
 
