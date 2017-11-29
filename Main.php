@@ -62,7 +62,6 @@ function print_input($input)
  */
 function print_output($output)
 {
-
     echo 'Output:[';
     foreach ($output as $value) {
         echo $value;
@@ -70,7 +69,7 @@ function print_output($output)
             echo ',';
         }
     }
-    echo ']' . "\n\r";
+    echo ']' . "\n\r\n\r";
 }
 
 entry();
