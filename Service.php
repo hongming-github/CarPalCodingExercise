@@ -66,7 +66,7 @@ class Service
             $frame_score += $current_score;
             // If it is a strike and haven't got another two additional score from next frames(based on example 1)
             // and is not last frame, then the bowler can get additional score from next frames.
-            if ($current_score == 10 && $index < 2 && $frame < count($input) - 1) {
+            if ($current_score === 10 && $index < 2 && $frame < count($input) - 1) {
                 $frame_score += $this->calculate_frame_score($input, $frame + 1, ++$index);
             }
 

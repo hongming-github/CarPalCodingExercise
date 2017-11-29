@@ -10,31 +10,67 @@ require 'Service.php';
 
 function entry()
 {
-    $data = new Model();
+    $model = new Model();
 
     $service = new Service();
 
-    $frames = $data->getInput();
+    $input1 = $model->getTestData1();
 
-//    for ($row = 0; $row < 10; $row++) {
-//        echo "Row number" . $row;
-//        echo "\n";
-//        for ($col = 0; $col < 3; $col++) {
-//            echo $frames[$row][$col];
-//            echo "\n";
-//        }
-//    }
+    $input2 = $model->getTestData2();
+
+    $input3 = $model->getTestData3();
+
+    $inputs = array($input1, $input2, $input3);
+
     try {
-        $result = $service->process_input($frames);
-        echo "\n";
-        for ($row = 0; $row < 10; $row++) {
-            echo 'result:' . $result[$row] . " ";
+        foreach ($inputs as $input) {
+            print_input($input);
+
+            $result = $service->process_input($input);
+
+            print_output($result);
         }
     } catch (Exception $exception) {
         echo 'Error message: ' . $exception->getMessage();
     }
+}
 
+/**
+ * Print input
+ * @param $input
+ */
+function print_input($input)
+{
+    echo 'Input:[';
+    foreach ($input as $frame) {
+        echo '[';
+        foreach ($frame as $score) {
+            echo $score;
+            if (!($score === end($frame))) {
+                echo ',';
+            }
+        }
+        echo ']';
+    }
+    echo ']' . "\n\r";
 
+}
+
+/**
+ * Print output.
+ * @param $output
+ */
+function print_output($output)
+{
+
+    echo 'Output:[';
+    foreach ($output as $value) {
+        echo $value;
+        if (!($value === end($output))) {
+            echo ',';
+        }
+    }
+    echo ']' . "\n\r";
 }
 
 entry();
