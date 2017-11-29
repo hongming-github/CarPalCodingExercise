@@ -51,6 +51,9 @@ function print_input($input)
             }
         }
         echo ']';
+        if (!($frame === end($input))) {
+            echo ',';
+        }
     }
     echo ']' . "\n\r";
 
